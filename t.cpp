@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stack>
 
 //test with -fno-elide-constructors
 
@@ -24,5 +25,9 @@ A GetA()
 
 int main() {
     A a = GetA();
+
+	std::stack<int> sa;
+	cout << sa.top() << endl;
+	cin.get();
     return 0;
 }

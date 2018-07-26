@@ -5,6 +5,8 @@ cmake_minimum_required (VERSION 3.8)
 
 project (mystack)
 
-
 add_executable (mystack mystack_2.cpp)
+add_executable (c11map c11map.cpp)
+add_executable (stack2list stack2list.cpp)
+add_executable (tt t.cpp)
 
