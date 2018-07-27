@@ -10,3 +10,6 @@ add_executable (c11map c11map.cpp)
 add_executable (stack2list stack2list.cpp)
 add_executable (tt t.cpp)
 
+
+add_executable(InvertedIndex InvertedIndex.cpp)
+
