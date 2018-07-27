@@ -18,30 +18,31 @@ public:
 		m_ExcludeIndex.clear();
 	}
 
-	void add(KEY key)
+	inline
+	void add(KEY key) 
 	{
 		m_EmptyDoc.insert(key);
 	}
 
-	template <class... DOCS>
+	template <class... DOCS> inline
 	void add(KEY key, DOCS... docs)
 	{
 		//zero template
 	};
 
-	template<class DOC1, class ...DOCS>
+	template<class DOC1, class ...DOCS> inline
 	void add(KEY key, DOC1 doc, DOCS... docs) {
 		//m_InvertedIndex[doc] = key;
 		m_InvertedIndex[doc].insert(key);
 		add(key, docs...);
 	}
 
-	template<class ...DOCS>
+	template<class ...DOCS> inline
 	void query(map<KEY, set<DOC>>& result, DOCS... docs) {
 		//zero template
 	}
 
-	template<class DOC1, class ...DOCS>
+	template<class DOC1, class ...DOCS> inline
 	void query(map<KEY, set<DOC>>& result, DOC1 doc, DOCS... docs) {
 		//map<DOC, set<KEY>>::iterator iter = m_InvertedIndex.find(doc);  TODO
 		auto miiiter = m_InvertedIndex.find(doc);
@@ -63,24 +64,24 @@ public:
 		query(result, docs...);
 	}
 
-	template<class DOC1, class ...DOCS>
+	template<class DOC1, class ...DOCS> inline
 	void exclude(KEY key, DOC1 doc, DOCS... docs)
 	{
 		m_ExcludeIndex[doc].insert(key);
 		exclude(key, docs...);
 	}
-	template<class ...DOCS>
+	template<class ...DOCS> inline
 	void exclude(KEY key, DOCS... docs)
 	{
 		//zero template
 	}
 
-	template<class ...DOCS>
+	template<class ...DOCS> inline
 	void queryexclude(map<KEY, set<DOC>>& result, DOCS... docs) {
 		//zero template
 	}
 
-	template<class DOC1, class ...DOCS>
+	template<class DOC1, class ...DOCS> inline
 	void queryexclude(map<KEY, set<DOC>>& result, DOC1 doc, DOCS... docs) {
 
 		auto miiiter = m_ExcludeIndex.find(doc);
@@ -97,7 +98,7 @@ public:
 		queryexclude(result, docs...);
 	}
 
-	template<class... DOCS>
+	template<class... DOCS> inline
 	void queryfinal(map<KEY, set<DOC>>& result, DOCS... docs)
 	{
 		query(result, docs...);
