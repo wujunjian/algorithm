@@ -161,14 +161,14 @@ int main() {
 	InvertedIndex<string, string, string> II;
 	II.add("KEY0", set<string>{}, "DOC1", "DOC2", "DOC3");
 	II.add("KEY1", set<string>{"anhui"}, "DOC4", "DOC2", "DOC66");
-	II.add("KEY2", set<string>{}, "zhongguo", "shanxi", "taiyuan");
+	II.add("KEY2", set<string>{"DOC4"}, "zhongguo", "shanxi", "taiyuan");
 	II.add("KEY3", set<string>{}, "dalian", "caohu", "anhui");
 	II.add("KEY4", set<string>{}, "dalian", "DOC66", "anhui");
 	II.add("KEY5", set<string>{}, "DOC2", "anhui");
-	II.add("TESTKEY", set<string>{}, "zhongguo", "shanxi").add("TESTKEY2", set<string>{}, "shanxi", "taiyuan");
+	II.add("TESTKEY", set<string>{"taiyuan"}, "zhongguo", "shanxi").add("TESTKEY", set<string>{}, "shanxi", "taiyuan");
 
 	set<string> result;
-	II.get(result, "DOC2", "anhui", "nothing", "DOC4", "DOC66");
+	II.get(result, "zhongguo", "shanxi", "taiyuan", "DOC4", "DOC66");
 
 	for (auto i = result.begin(); i != result.end(); ++i)
 	{
