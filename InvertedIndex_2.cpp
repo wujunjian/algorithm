@@ -3,6 +3,8 @@
 #include <array>
 #include <set>
 #include <string>
+#include <time.h>
+#include <thread>
 
 using namespace std;
 
@@ -163,12 +165,26 @@ int main() {
 	II.add("KEY1", set<string>{"anhui"}, "DOC4", "DOC2", "DOC66");
 	II.add("KEY2", set<string>{"DOC4"}, "zhongguo", "shanxi", "taiyuan");
 	II.add("KEY3", set<string>{}, "dalian", "caohu", "anhui");
+
+	for (int i = 0; i < 100000; ++i)
+	{
+		II.add("KEYNN" + to_string(i), set<string>{}, "dalian", "taiyuan", "anhui");
+	}
 	II.add("KEY4", set<string>{}, "dalian", "DOC66", "anhui");
 	II.add("KEY5", set<string>{}, "DOC2", "anhui");
 	II.add("TESTKEY", set<string>{"taiyuan"}, "zhongguo", "shanxi").add("TESTKEY", set<string>{}, "shanxi", "taiyuan");
 
 	set<string> result;
-	II.get(result, "zhongguo", "shanxi", "taiyuan", "DOC4", "DOC66");
+	clock_t begin = clock();
+	//this_thread::sleep_for(2s);
+	std::chrono::milliseconds ms(1);
+	this_thread::sleep_for(ms);
+	//this_thread::sleep_for(std::chrono::milliseconds(2));
+	//this_thread::sleep_for(std::chrono::milliseconds{ 2 });
+	II.get(result, "zhongguo", "anhui", "taiyuan", "dalian", "DOC66");
+	clock_t end = clock();
+	double  dur = 1000* (end - begin)/ CLOCKS_PER_SEC;
+	printf("CPU time used (per clock(): %.3f ms\n", dur);
 
 	for (auto i = result.begin(); i != result.end(); ++i)
 	{
