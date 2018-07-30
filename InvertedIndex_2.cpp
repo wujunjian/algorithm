@@ -17,7 +17,7 @@ public:
 	}
 
 	template<class... DOCS> inline
-	InvertedIndex& add(KEY key, DOCS... docs)
+	InvertedIndex& add(KEY key, set<DOC>&&exclude, DOCS... docs)
 	{
 		set<CON> con;
 		string csize = to_string(sizeof...(docs));
@@ -29,17 +29,27 @@ public:
 			scon += *coniter;
 		}
 		m_FirstIndex[scon].insert(key);
+		toconjunction(scon, csize, std::forward<set<DOC>>(exclude));
 		toconjunction(scon, csize, docs...);
 		return *this;
 	}
 
+	inline
+	void toconjunction(CON& scon, string csize, set<DOC>&& exclude)
+	{
+		for (auto exiter = exclude.begin(); exiter != exclude.end(); ++exiter)
+		{
+			m_SecondIndex[csize + *exiter][scon] = false;
+		}
+	}
+
 	template <class... DOCS> inline
-	void toconjunction(CON scon, string csize, DOCS... docs)
+	void toconjunction(CON& scon, string csize, DOCS... docs)
 	{
 		//zero template
 	}
 	template <class DOC1, class... DOCS> inline
-	void toconjunction(CON scon, string csize, DOC1 doc, DOCS... docs)
+	void toconjunction(CON& scon, string csize, DOC1 doc, DOCS... docs)
 	{
 		m_SecondIndex[csize + doc][scon]=true;
 		toconjunction(scon, csize, docs...);
@@ -149,13 +159,13 @@ public:
 
 int main() {
 	InvertedIndex<string, string, string> II;
-	II.add("KEY0", "DOC1", "DOC2", "DOC3");
-	II.add("KEY1", "DOC4", "DOC2", "DOC66");
-	II.add("KEY2", "zhongguo", "shanxi", "taiyuan");
-	II.add("KEY3", "dalian", "caohu", "anhui");
-	II.add("KEY4", "dalian", "DOC66", "anhui");
-	II.add("KEY5", "DOC2", "anhui");
-	II.add("TESTKEY", "zhongguo", "shanxi").add("TESTKEY2", "shanxi", "taiyuan");
+	II.add("KEY0", set<string>{}, "DOC1", "DOC2", "DOC3");
+	II.add("KEY1", set<string>{"anhui"}, "DOC4", "DOC2", "DOC66");
+	II.add("KEY2", set<string>{}, "zhongguo", "shanxi", "taiyuan");
+	II.add("KEY3", set<string>{}, "dalian", "caohu", "anhui");
+	II.add("KEY4", set<string>{}, "dalian", "DOC66", "anhui");
+	II.add("KEY5", set<string>{}, "DOC2", "anhui");
+	II.add("TESTKEY", set<string>{}, "zhongguo", "shanxi").add("TESTKEY2", set<string>{}, "shanxi", "taiyuan");
 
 	set<string> result;
 	II.get(result, "DOC2", "anhui", "nothing", "DOC4", "DOC66");
