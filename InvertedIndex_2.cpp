@@ -10,14 +10,14 @@ template<class KEY, class CON, class DOC>
 class InvertedIndex {
 private:
 	map<CON, set<KEY>> m_FirstIndex;
-	map<DOC, set<CON>> m_SecondIndex;
+	map<DOC, map<CON, bool>> m_SecondIndex;
 public:
 	void init() {
 		m_InvertedIndex.clear(); 
 	}
 
 	template<class... DOCS> inline
-	void add(KEY key, DOCS... docs)
+	InvertedIndex& add(KEY key, DOCS... docs)
 	{
 		set<CON> con;
 		string csize = to_string(sizeof...(docs));
@@ -30,6 +30,7 @@ public:
 		}
 		m_FirstIndex[scon].insert(key);
 		toconjunction(scon, csize, docs...);
+		return *this;
 	}
 
 	template <class... DOCS> inline
@@ -40,7 +41,7 @@ public:
 	template <class DOC1, class... DOCS> inline
 	void toconjunction(CON scon, string csize, DOC1 doc, DOCS... docs)
 	{
-		m_SecondIndex[csize + doc].insert(scon);
+		m_SecondIndex[csize + doc][scon]=true;
 		toconjunction(scon, csize, docs...);
 	}
 
@@ -59,33 +60,32 @@ public:
 	}
 
 	template<class ...DOCS> inline
-	void querycon(set<KEY>& result, string csize, DOCS... docs) {
+	void querycon(map<CON, int>& result, string csize, DOCS... docs) {
 		//zero template
 	}
 
 	template<class DOC1, class ...DOCS> inline
-	void querycon(set<KEY>& result, string csize, DOC1 doc, DOCS... docs) {
+	void querycon(map<CON, int>& result, string csize, DOC1 doc, DOCS... docs) {
 		auto msiter = m_SecondIndex.find(csize + doc);
 		if (msiter != m_SecondIndex.end())
 		{
-			if (result.empty())
+			auto ibelong = msiter->second.begin();
+			for (; ibelong != msiter->second.end(); ++ibelong)
 			{
-				result = msiter->second;
-			}
-			else {
-				auto riter = result.begin();
-				for (; riter != result.end();)
+				if (result.find(ibelong->first)==result.end())
 				{
-					if (msiter->second.find(*riter) == msiter->second.end())
-						riter = result.erase(riter);
-					else
-						++riter;
+					result[ibelong->first] = 0;
+				}
+
+				if (ibelong->second) //belong
+				{
+					++result[ibelong->first];
+				}
+				else  //Does not belong
+				{
+					--result[ibelong->first];
 				}
 			}
-		}
-		else {
-			result.clear();
-			return; //需要取交集,所以一旦有查询为空的,则直接返回.
 		}
 		querycon(result, csize, docs...);
 	}
@@ -97,10 +97,17 @@ public:
 		int nsize = sizeof...(docs);
 		for (; nsize >= 0; --nsize)
 		{
-			set<CON> cons;
+			map<CON, int> cons;
 			set<KEY> keys;
 			string csize = to_string(nsize);
 			querycon(cons, csize, docs...);
+			for (auto consiter = cons.begin(); consiter != cons.end();)
+			{
+				if (consiter->second != nsize)
+					consiter = cons.erase(consiter);
+				else
+					++consiter;
+			}
 			querykey(cons, keys);
 			
 			auto k = keys.begin();
@@ -112,11 +119,11 @@ public:
 	}
 
     inline
-	void querykey(set<CON>& cons, set<KEY>& result) {
+	void querykey(map<CON, int>& cons, set<KEY>& result) {
 		auto con = cons.begin();
 		for (; con != cons.end(); ++con)
 		{
-			auto mFiiter = m_FirstIndex.find(*con);
+			auto mFiiter = m_FirstIndex.find(con->first);
 			if (mFiiter != m_FirstIndex.end())
 			{
 				if (result.empty())
@@ -148,10 +155,10 @@ int main() {
 	II.add("KEY3", "dalian", "caohu", "anhui");
 	II.add("KEY4", "dalian", "DOC66", "anhui");
 	II.add("KEY5", "DOC2", "anhui");
-	II.add("KEY5", "DOC2", "anhui");
+	II.add("TESTKEY", "zhongguo", "shanxi").add("TESTKEY2", "shanxi", "taiyuan");
 
 	set<string> result;
-	II.get(result, "DOC2", "anhui");
+	II.get(result, "DOC2", "anhui", "nothing", "DOC4", "DOC66");
 
 	for (auto i = result.begin(); i != result.end(); ++i)
 	{

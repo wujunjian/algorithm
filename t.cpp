@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stack>
+#include <set>
 
 //test with -fno-elide-constructors
 
@@ -23,7 +24,16 @@ A GetA()
 	return A();
 }
 
-int main() {
+int setmain() {
+	set<int> seta;
+	seta.insert(1);
+	seta.insert(2);
+	seta.insert(1);
+	cout << seta.size() << endl;
+	return 0;
+}
+int main () {
+
     A a = GetA();
 
 	std::stack<int> sa;
