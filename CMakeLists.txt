@@ -13,4 +13,5 @@ add_executable (tt t.cpp)
 
 add_executable(InvertedIndex InvertedIndex.cpp)
 add_executable(InvertedIndex_2 InvertedIndex_2.cpp)
+add_executable(reversestack reversestack.cpp)
 
