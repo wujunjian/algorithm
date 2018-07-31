@@ -5,15 +5,19 @@ using namespace std;
 
 class Node {
 public:
+	static Node* root;
 	int m_data;
 	Node(int data) :m_data(data) { next = NULL; }
 	Node * next;
 };
 
+Node* Node::root = NULL;
+
 Node *reversenode(Node * node)
 {
 	if (node->next == NULL)
 	{
+		Node::root = node;
 		return node;
 	}
 	else {
