@@ -39,7 +39,7 @@ int main()
 	Node g(6);  f.next = &g;
 
 	reversenode(&a)->next = NULL;
-	auto begin = &g;
+	auto begin = Node::root;
 	for (; begin != NULL; begin = begin->next)
 	{
 		cout << begin->m_data << endl;
