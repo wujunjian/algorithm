@@ -4,15 +4,15 @@
 
 namespace util {
 
-	static int flip(int n) {
+	inline int flip(int n) {
 		return n ^ 1;
 	}
 
-	static int sign(int n) {
+	inline int sign(int n) {
 		return flip((n >> 31) & 1);
 	}
 
-	static int getmax(int a, int b) {
+	inline int getmax(int a, int b) {
 		int c = a - b;    
 		int sa = sign(a); 
 		int sb = sign(b); 
@@ -25,5 +25,20 @@ namespace util {
 		int returnB = flip(returnA);
 		return a * returnA + b * returnB;
 	}
+
+
+	//TODO change int to  std::array<char,32>
+	inline int add(int a, int b)
+	{
+		int sum = a;
+		while (b != 0)
+		{
+			sum = a ^ b;
+			b = (a&b) << 1;
+			a = sum;
+		}
+		return sum;
+	}
+
 
 };
