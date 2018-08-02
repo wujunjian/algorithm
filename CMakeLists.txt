@@ -17,3 +17,6 @@ add_executable(reversestack reversestack.cpp)
 
 
 add_executable(reversenode reversenode.cpp)
+
+
+add_subdirectory ("bit")
