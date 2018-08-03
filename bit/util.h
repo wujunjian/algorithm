@@ -56,7 +56,7 @@ namespace util {
 
 	}
 
-	std::stack<char>& xor(const char* a, const char* b)
+	std::stack<char> xor(const char* a, const char* b)
 	{
 		const char* pa = a;
 		const char* pb = b;
@@ -96,5 +96,50 @@ namespace util {
 		}
 
 		return result;
+	}
+	
+
+	int count1(int n)
+	{
+		
+		int res = 0;
+		if (n < 0)
+		{//
+			res = 1;
+			n = -n;
+		}
+			
+		while (n != 0)
+		{
+			res += n & 1;
+			n >>= 1; // n>>>=1 c++ Ã»ÓĞÎŞ·ûºÅÓÒÒÆ 
+		}
+		return res;
+	}
+
+	int count2(int n)
+	{
+		int res = 0;
+		if (n < 0)
+		{
+			res = 1;
+			n = -n;
+		}
+		while (n != 0)
+		{
+			n &= (n - 1);
+			++res;
+		}
+		return res;
+	}
+
+	int ParallelCount(int n)
+	{
+		n = (n & 0x55555555) + ((n >> 1) & 0x55555555);
+		n = (n & 0x33333333) + ((n >> 2) & 0x33333333);
+		n = (n & 0x0f0f0f0f) + ((n >> 4) & 0x0f0f0f0f);
+		n = (n & 0x00ff00ff) + ((n >> 8) & 0x00ff00ff);
+		n = (n & 0x0000ffff) + ((n >> 16) & 0x0000ffff);
+		return n;
 	}
 };
