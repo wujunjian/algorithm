@@ -5,12 +5,33 @@ using namespace std;
 
 int main()
 {
+	list<int> ls;
+	ls.push_back(1);
+	ls.push_back(1);
+	ls.push_back(3);
+	ls.push_back(3);
+	ls.push_back(9);
+	ls.push_back(8);
+
+	cout << util::get1TimesOddNum(ls) << endl;
+
+	util::get2TimesOddNum(ls);
+	for (int n : ls)
+		cout << n << endl;
+	cin.get();
+
+	return 0;
+}
+
+int main22()
+{
 	cout << util::count2(-5) << endl;
 
 
 	cout << util::ParallelCount(-8552) << endl;
 
 	cin.get();
+	return 0;
 }
 
 

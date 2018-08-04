@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stack>
+#include <list>
 
 namespace util {
 
@@ -133,8 +134,8 @@ namespace util {
 		return res;
 	}
 
-	int ParallelCount(int n)
-	{
+	inline int ParallelCount(int n)
+	{//TODO negative 
 		n = (n & 0x55555555) + ((n >> 1) & 0x55555555);
 		n = (n & 0x33333333) + ((n >> 2) & 0x33333333);
 		n = (n & 0x0f0f0f0f) + ((n >> 4) & 0x0f0f0f0f);
@@ -142,4 +143,41 @@ namespace util {
 		n = (n & 0x0000ffff) + ((n >> 16) & 0x0000ffff);
 		return n;
 	}
+
+
+	//have one odd num
+	inline int get1TimesOddNum(std::list<int>& ls)
+	{
+		int eO = 0;
+		for (int cur : ls)
+		{
+			eO ^= cur;
+		}
+
+		return eO;
+	}
+
+	//have two odd num
+	inline void get2TimesOddNum(std::list<int>& ls)
+	{
+		int eO = 0, eOhasOne = 0;
+		for (int cur : ls)
+		{
+			eO ^= cur;
+		}
+
+		int frightbit = eO & (~eO + 1);
+		for (int cur : ls)
+		{
+			if ((cur&frightbit) != 0)
+				eOhasOne ^= cur;
+		}
+
+		int eOotherOne = eOhasOne ^ eO;
+		ls.clear();
+		ls.push_back(eOhasOne);
+		ls.push_back(eOotherOne);
+	}
+
+
 };
