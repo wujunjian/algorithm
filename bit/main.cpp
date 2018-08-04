@@ -5,6 +5,21 @@ using namespace std;
 
 int main()
 {
+	list<int>&& res = util::getksysnumfromNum(10000, 16);
+	for (auto iter = res.rbegin();iter!= res.rend();++iter)
+	{
+		cout << *iter << ",";
+	}
+	cout << endl;
+
+	int resnum = util::getnumfromksysNum(res, 16);
+
+	cout << resnum << endl;
+	return 0;
+}
+
+int main33()
+{
 	list<int> ls;
 	ls.push_back(1);
 	ls.push_back(1);

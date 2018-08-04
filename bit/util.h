@@ -180,4 +180,28 @@ namespace util {
 	}
 
 
+	inline std::list<int> getksysnumfromNum(int value, int k)
+	{
+		std::list<int> res;
+		int index = 0;
+		while (value != 0)
+		{//从低位到高位
+			res.push_back(value % k);
+			value /= k;
+		}
+
+		return res;
+	}
+
+	inline int getnumfromksysNum(std::list<int>& eO, int k)
+	{
+		int res = 0;
+		for (auto iter = eO.rbegin(); iter != eO.rend(); ++iter)
+		{
+			res = res * k + *iter;
+		}
+
+		return res;
+	}
+
 };
